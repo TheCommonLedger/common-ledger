@@ -1,10 +1,7 @@
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+"use client";
 
 import Link from "next/link";
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import { useEffect, useState } from "react";
 
 type Article = {
   slug: string;
@@ -16,34 +13,31 @@ type Article = {
   tags?: string[];
 };
 
-function getArticles(): Article[] {
-  const dir = path.join(process.cwd(), "content", "articles");
-  if (!fs.existsSync(dir)) return [];
-
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
-
-  const articles = files.map((file) => {
-    const slug = file.replace(/\.mdx$/, "");
-    const raw = fs.readFileSync(path.join(dir, file), "utf8");
-    const parsed = matter(raw);
-    const data = (parsed.data ?? {}) as any;
-
-    return {
-      slug,
-      title: data.title ?? slug,
-      subtitle: data.subtitle ?? "",
-      author: data.author ?? "The Common Ledger",
-      date: data.date ?? "",
-      excerpt: data.excerpt ?? "",
-      tags: Array.isArray(data.tags) ? data.tags : [],
-    };
-  });
-
-  return articles.sort((a, b) => (a.date < b.date ? 1 : -1));
-}
+export const runtime = "nodejs";
 
 export default function Home() {
-  const articles = getArticles();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [err, setErr] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      setErr("");
+      setLoading(true);
+
+      const res = await fetch("/api/articles", { cache: "no-store" });
+      const json = await res.json();
+
+      if (!res.ok) {
+        setErr(json?.error ?? "Failed to load articles");
+        setLoading(false);
+        return;
+      }
+
+      setArticles(json.articles ?? []);
+      setLoading(false);
+    })();
+  }, []);
 
   return (
     <main className="mx-auto max-w-4xl px-5 py-10">
@@ -54,13 +48,22 @@ export default function Home() {
         </p>
       </header>
 
-      <section className="grid gap-4">
-        {articles.length === 0 ? (
-          <div className="rounded-2xl border border-gray-200 p-6 text-gray-700">
-            No articles yet. Add a file to <code>content/articles</code>.
-          </div>
-        ) : (
-          articles.map((a) => (
+      {loading ? (
+        <div className="rounded-2xl border border-gray-200 p-6 text-gray-700">
+          Loading articles…
+        </div>
+      ) : err ? (
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800">
+          <div className="font-semibold">Could not load articles</div>
+          <pre className="mt-2 whitespace-pre-wrap text-sm">{err}</pre>
+        </div>
+      ) : articles.length === 0 ? (
+        <div className="rounded-2xl border border-gray-200 p-6 text-gray-700">
+          No articles yet.
+        </div>
+      ) : (
+        <section className="grid gap-4">
+          {articles.map((a) => (
             <article
               key={a.slug}
               className="rounded-2xl border border-gray-200 p-6 hover:bg-gray-50"
@@ -89,7 +92,7 @@ export default function Home() {
                   <>
                     <span>•</span>
                     <span className="flex flex-wrap gap-2">
-                      {a.tags.map((t: string) => (
+                      {a.tags.map((t) => (
                         <span
                           key={t}
                           className="rounded-full border border-gray-200 px-2 py-0.5"
@@ -102,9 +105,9 @@ export default function Home() {
                 ) : null}
               </div>
             </article>
-          ))
-        )}
-      </section>
+          ))}
+        </section>
+      )}
 
       <footer className="mt-12 text-sm text-gray-500">
         © {new Date().getFullYear()} The Common Ledger
