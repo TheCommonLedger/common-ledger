@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  outputFileTracingIncludes: {
-    "/": ["./content/articles/**/*"],
+  experimental: {
+    outputFileTracingIncludes: {
+      "/": ["./content/articles/**/*"],
+    },
   },
 };
 
 module.exports = nextConfig;
-
