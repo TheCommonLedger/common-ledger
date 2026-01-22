@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import matter from "gray-matter";
 
+export const runtime = "nodejs";
+
 const VERSION = "api-articles-v2";
 
 type GitHubContentItem = {

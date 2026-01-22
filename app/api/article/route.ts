@@ -4,6 +4,8 @@ import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
 
+export const runtime = "nodejs";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug");
