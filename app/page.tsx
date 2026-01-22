@@ -13,7 +13,7 @@ type Article = {
   tags?: string[];
 };
 
-export default function Home() {
+export default function ArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string>("");

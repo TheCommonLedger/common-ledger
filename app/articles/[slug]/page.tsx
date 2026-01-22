@@ -6,15 +6,19 @@ import { marked } from "marked";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const ARTICLES_PATH = process.env.GITHUB_ARTICLES_PATH ?? "content/articles";
+const ARTICLES_PATH = process.env.GITHUB_ARTICLES_PATH ?? "Content/Articles";
 
 async function fetchArticleRaw(slug: string): Promise<string | null> {
-  const repo = process.env.GITHUB_REPO;
-  if (!repo) return null;
+const repo = process.env.GITHUB_REPO;
+
+if (!repo) {
+  console.log("[fetchArticleRaw] Missing env GITHUB_REPO");
+  return null;
+}
 
   const token = process.env.GITHUB_TOKEN;
-
   const url = `https://api.github.com/repos/${repo}/contents/${ARTICLES_PATH}/${slug}.mdx`;
+  console.log("[fetchArticleRaw] URL:", url);
 
   const res = await fetch(url, {
     headers: {
@@ -24,14 +28,20 @@ async function fetchArticleRaw(slug: string): Promise<string | null> {
     cache: "no-store",
   });
 
-  if (!res.ok) return null;
+  if (!res.ok) {
+  const text = await res.text().catch(() => "");
+  console.log("[fetchArticleRaw] GitHub fetch failed:", res.status, text.slice(0, 200));
+  return null;
+}
   return await res.text();
 }
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
-  const raw = await fetchArticleRaw(params.slug);
+  const { slug } = await params;
+
+  const raw = await fetchArticleRaw(slug);
   if (!raw) return { title: "Article not found | The Common Ledger" };
 
   const parsed = matter(raw);
@@ -41,7 +51,9 @@ export async function generateMetadata(
   const description =
     data.excerpt ?? data.subtitle ?? "Truth-first reporting. Rhetoric stripped away.";
 
-  const og = `/api/og?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(description)}`;
+  const og = `/api/og?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(
+    description
+  )}`;
 
   return {
     title: `${title} | The Common Ledger`,
@@ -61,8 +73,14 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const raw = await fetchArticleRaw(params.slug);
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const raw = await fetchArticleRaw(slug);
   if (!raw) return notFound();
 
   const parsed = matter(raw);
@@ -72,9 +90,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
   return (
     <main className="mx-auto max-w-3xl px-5 py-10">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight">{data.title ?? "Untitled"}</h1>
+        <h1 className="text-4xl font-bold tracking-tight">
+          {data.title ?? "Untitled"}
+        </h1>
 
-        {data.subtitle ? <p className="mt-2 text-lg text-gray-600">{data.subtitle}</p> : null}
+        {data.subtitle ? (
+          <p className="mt-2 text-lg text-gray-600">{data.subtitle}</p>
+        ) : null}
 
         <div className="mt-4 text-sm text-gray-500">
           <span>{data.author ?? "The Common Ledger"}</span>
