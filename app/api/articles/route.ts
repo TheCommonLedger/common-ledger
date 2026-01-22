@@ -22,7 +22,7 @@ export async function GET() {
 
   const token = process.env.GITHUB_TOKEN;
 
-  const listUrl = `https://api.github.com/repos/${repo}/contents/content/articles`;
+  const listUrl = `https://api.github.com/repos/${repo}/contents/Content/Articles`;
 
   const listRes = await fetch(listUrl, {
     headers: {
