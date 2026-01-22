@@ -8,14 +8,19 @@ type GitHubContentItem = {
   download_url: string | null;
 };
 
-export async function GET() {
-  const repo = process.env.GITHUB_REPO; // e.g. "corym/common-ledger"
-  if (!repo) {
-    return NextResponse.json(
-      { error: "Missing GITHUB_REPO env var (e.g. corym/common-ledger)" },
-      { status: 500 }
-    );
-  }
+const repo = process.env.GITHUB_REPO;
+
+if (!repo) {
+  return NextResponse.json(
+    {
+      error: "Missing GITHUB_REPO env var (e.g. corym/common-ledger)",
+      probe: process.env.PROBE ?? null,
+      hasToken: Boolean(process.env.GITHUB_TOKEN),
+      nodeEnv: process.env.NODE_ENV ?? null,
+    },
+    { status: 500 }
+  );
+}
 
   const token = process.env.GITHUB_TOKEN;
 
