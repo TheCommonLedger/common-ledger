@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import matter from "gray-matter";
 
+const VERSION = "api-articles-v2";
+
 type GitHubContentItem = {
   name: string;
   path: string;
@@ -13,9 +15,9 @@ const repo = process.env.GITHUB_REPO;
 if (!repo) {
   return NextResponse.json(
     {
+      version: VERSION,
       error: "Missing GITHUB_REPO env var (e.g. corym/common-ledger)",
       probe: process.env.PROBE ?? null,
-      hasToken: Boolean(process.env.GITHUB_TOKEN),
       nodeEnv: process.env.NODE_ENV ?? null,
     },
     { status: 500 }
