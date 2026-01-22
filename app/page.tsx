@@ -1,8 +1,7 @@
-import Link from "next/link";
-import matter from "gray-matter";
+"use client";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 type Article = {
   slug: string;
@@ -14,61 +13,35 @@ type Article = {
   tags?: string[];
 };
 
-type GitHubContentItem = {
-  name: string;
-  type: "file" | "dir";
-  download_url: string | null;
-};
+export default function Home() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string>("");
 
-async function getArticlesFromGitHub(): Promise<Article[]> {
-  const repo = process.env.GITHUB_REPO; // e.g. "TheCommonLedger/common-ledger"
-  if (!repo) return [];
+  useEffect(() => {
+    (async () => {
+      try {
+        setErr("");
+        setLoading(true);
 
-  const token = process.env.GITHUB_TOKEN;
+        const res = await fetch("/api/articles", { cache: "no-store" });
+        const json = await res.json();
 
-  const listUrl = `https://api.github.com/repos/${repo}/contents/content/articles`;
-  const listRes = await fetch(listUrl, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    cache: "no-store",
-  });
+        if (!res.ok) {
+          setErr(json?.error ?? "Failed to load articles");
+          setArticles([]);
+          return;
+        }
 
-  if (!listRes.ok) return [];
-
-  const items = (await listRes.json()) as GitHubContentItem[];
-
-  const mdxFiles = items.filter(
-    (x) => x.type === "file" && x.name.endsWith(".mdx") && x.download_url
-  );
-
-  const articles = await Promise.all(
-    mdxFiles.map(async (f) => {
-      const rawRes = await fetch(f.download_url!, { cache: "no-store" });
-      const raw = await rawRes.text();
-      const parsed = matter(raw);
-      const data = (parsed.data ?? {}) as any;
-
-      return {
-        slug: f.name.replace(/\.mdx$/, ""),
-        title: data.title ?? f.name.replace(/\.mdx$/, ""),
-        subtitle: data.subtitle ?? "",
-        author: data.author ?? "The Common Ledger",
-        date: data.date ?? "",
-        excerpt: data.excerpt ?? "",
-        tags: Array.isArray(data.tags) ? data.tags : [],
-      } as Article;
-    })
-  );
-
-  articles.sort((a, b) => (String(a.date) < String(b.date) ? 1 : -1));
-  return articles;
-}
-
-export default async function Home() {
-  const repoMissing = !process.env.GITHUB_REPO;
-  const articles = await getArticlesFromGitHub();
+        setArticles(json?.articles ?? []);
+      } catch (e: any) {
+        setErr(e?.message ?? "Failed to load articles");
+        setArticles([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   return (
     <main className="mx-auto max-w-4xl px-5 py-10">
@@ -79,13 +52,14 @@ export default async function Home() {
         </p>
       </header>
 
-      {repoMissing ? (
+      {loading ? (
+        <div className="rounded-2xl border border-gray-200 p-6 text-gray-700">
+          Loading articles…
+        </div>
+      ) : err ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800">
-          <div className="font-semibold">Missing GITHUB_REPO</div>
-          <p className="mt-2">
-            Add <code>GITHUB_REPO</code> in Vercel → Project → Settings →
-            Environment Variables.
-          </p>
+          <div className="font-semibold">Could not load articles</div>
+          <pre className="mt-2 whitespace-pre-wrap text-sm">{err}</pre>
         </div>
       ) : articles.length === 0 ? (
         <div className="rounded-2xl border border-gray-200 p-6 text-gray-700">
