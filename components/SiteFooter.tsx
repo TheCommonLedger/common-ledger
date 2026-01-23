@@ -14,31 +14,30 @@ export default function SiteFooter() {
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          {/* Replace these hrefs when you’re ready */}
-          <a
-            className="rounded-lg bg-neutral-900 px-5 py-3 text-sm font-semibold text-white"
-            href="https://www.tiktok.com/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            TikTok
-          </a>
-          <a
-            className="rounded-lg border border-neutral-300 px-5 py-3 text-sm font-semibold text-neutral-900"
-            href="https://x.com/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            X (Twitter)
-          </a>
-          <a
-            className="rounded-lg border border-neutral-300 px-5 py-3 text-sm font-semibold text-neutral-900"
-            href="https://facebook.com/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Facebook
-          </a>
+        <a
+          className="rounded-lg bg-neutral-900 px-5 py-3 text-sm font-semibold text-white"
+          href="https://www.tiktok.com/@the.common.ledger"
+          target="_blank"
+          rel="noreferrer"
+        >
+          TikTok
+        </a>
+        <a
+          className="rounded-lg border border-neutral-300 px-5 py-3 text-sm font-semibold text-neutral-900"
+          href="https://x.com/TheCommonLedger"
+          target="_blank"
+          rel="noreferrer"
+        >
+          X
+        </a>
+        <a
+          className="rounded-lg border border-neutral-300 px-5 py-3 text-sm font-semibold text-neutral-900"
+          href="https://www.facebook.com/TheCommonLedger"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Facebook
+        </a>
         </div>
 
         {/* Simple “newsletter” placeholder without backend */}
