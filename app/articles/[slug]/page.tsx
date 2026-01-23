@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import matter from "gray-matter";
 import { marked } from "marked";
+import Link from "next/link";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -89,6 +90,9 @@ export default async function Page({
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-10">
+    <Link href="/articles" className="text-sm font-semibold text-neutral-700 hover:underline">
+  ← Back to Articles
+</Link>
       <header className="mb-8">
         <h1 className="text-4xl font-bold tracking-tight">
           {data.title ?? "Untitled"}
@@ -106,7 +110,7 @@ export default async function Page({
       </header>
 
       <article
-        className="prose prose-gray max-w-none"
+        className="prose prose-neutral max-w-none prose-headings:tracking-tight prose-a:font-semibold prose-a:text-neutral-900"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </main>
