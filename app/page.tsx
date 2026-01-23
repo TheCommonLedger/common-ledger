@@ -131,21 +131,6 @@ export default function HomePage() {
           </div>
         ))}
       </section>
-
-      {/* Footer */}
-      <footer className="mt-14 border-t border-neutral-200 pt-8 text-sm text-neutral-600">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <div>© {new Date().getFullYear()} The Common Ledger</div>
-          <div className="flex gap-4">
-            <Link className="hover:underline" href="/articles">
-              Articles
-            </Link>
-            <Link className="hover:underline" href="/about">
-              About
-            </Link>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

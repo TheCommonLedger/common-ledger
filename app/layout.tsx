@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "../components/SiteHeader";
+import SiteFooter from "../components/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         {children}
+        <div className="mx-auto max-w-6xl px-5 pb-10">
+    <SiteFooter />
+  </div>
       </body>
     </html>
   );
