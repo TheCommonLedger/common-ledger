@@ -3,10 +3,16 @@ import Link from "next/link";
 import ArticleCard from "../components/ArticleCard";
 import { getAllArticles } from "../lib/articles";
 
-export default function HomePage() {
-  const articles = getAllArticles();
-  const featured = articles[0] ?? null;
-  const latest = articles.slice(1, 7);
+export default function HomePage() {  
+const allArticles = getAllArticles()
+  .slice()
+  .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+
+const featuredArticle = allArticles.find((a) => a.featured) ?? allArticles[0] ?? null;
+
+const latestArticles = featuredArticle
+  ? allArticles.filter((a) => a.slug !== featuredArticle.slug).slice(0, 4)
+  : [];
 
   return (
     <main className="mx-auto max-w-6xl px-5 pb-10">
@@ -30,9 +36,9 @@ export default function HomePage() {
               Browse Articles
             </Link>
 
-            {featured?.slug ? (
+            {featuredArticle?.slug ? (
               <Link
-                href={`/articles/${featured.slug}`}
+                href={`/articles/${featuredArticle.slug}`}
                 className="rounded-lg border border-neutral-300 px-5 py-3 text-sm font-semibold text-neutral-900"
               >
                 Read Featured
@@ -96,9 +102,9 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {featured ? (
+        {featuredArticle ? (
           <div className="mt-4">
-            <ArticleCard a={featured} />
+            <ArticleCard a={featuredArticle} />
           </div>
         ) : (
           <div className="mt-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 text-neutral-700">
@@ -111,7 +117,7 @@ export default function HomePage() {
       <section className="mt-10">
         <h2 className="text-xl font-semibold text-neutral-200">Latest</h2>
         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {latest.map((a) => (
+          {latestArticles.map((a) => (
             <ArticleCard key={a.slug} a={a} />
           ))}
         </div>

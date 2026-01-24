@@ -13,6 +13,7 @@ export type ArticleMeta = {
   tags?: string[];
   excerpt?: string;
   image?: string;
+  featured?: boolean;
 };
 
 export function getAllArticles(): ArticleMeta[] {
@@ -34,6 +35,7 @@ export function getAllArticles(): ArticleMeta[] {
       tags: (data as any).tags ?? [],
       excerpt: (data as any).excerpt ?? "",
       image: (data as any).image,
+      featured: Boolean((data as any).featured),
     } as ArticleMeta;
   
   });
