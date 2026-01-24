@@ -94,5 +94,44 @@ body {
 .tcl-article ul ul { list-style-type: circle; }
 .tcl-article ol ol { list-style-type: lower-alpha; }
 
+/* Inline citations inside articles */
+.tcl-article sup.citation {
+  font-size: 0.8em;
+  vertical-align: super;
+  margin-left: 0.15rem;
+}
+
+.tcl-article sup.citation a {
+  text-decoration: none;
+  color: #0f172a;           /* slate-900 */
+  border-bottom: 1px dotted rgba(15, 23, 42, 0.45);
+  padding: 0 0.15rem;
+}
+
+.tcl-article sup.citation a:hover {
+  border-bottom-color: rgba(15, 23, 42, 0.9);
+}
+
+/* Tooltip styling is controlled by the browser via title="" */
+
+/* Inline citations inside articles */
+.tcl-article sup.citation {
+  font-size: 0.75em;
+  vertical-align: super;
+  margin-left: 0.15rem;
+}
+
+.tcl-article sup.citation a {
+  text-decoration: none;
+  color: #0f172a;
+  border-bottom: 1px dotted rgba(15, 23, 42, 0.45);
+  padding: 0 0.1rem;
+}
+
+.tcl-article sup.citation a:hover {
+  border-bottom-color: rgba(15, 23, 42, 0.9);
+}
+
+
 
 }
