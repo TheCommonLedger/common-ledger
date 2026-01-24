@@ -12,6 +12,7 @@ export type ArticleMeta = {
   date: string;
   tags?: string[];
   excerpt?: string;
+  image?: string;
 };
 
 export function getAllArticles(): ArticleMeta[] {
@@ -32,7 +33,9 @@ export function getAllArticles(): ArticleMeta[] {
       date: (data as any).date ?? "1970-01-01",
       tags: (data as any).tags ?? [],
       excerpt: (data as any).excerpt ?? "",
+      image: (data as any).image,
     } as ArticleMeta;
+  
   });
 
   return articles.sort((a, b) => (a.date < b.date ? 1 : -1));

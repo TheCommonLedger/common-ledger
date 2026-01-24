@@ -1,46 +1,47 @@
+import Image from "next/image";
 import Link from "next/link";
-import type { ArticleMeta } from "@/lib/articles";
+import type { ArticleMeta } from "../lib/articles";
 
 function formatDate(iso?: string) {
   if (!iso) return null;
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 export default function ArticleCard({ a }: { a: ArticleMeta }) {
-  const date = formatDate(a.date);
-
   return (
-    <Link
-      href={`/articles/${a.slug}`}
-      className="block rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition hover:shadow-md"
-    >
-      <div className="flex flex-col gap-2">
-        <div className="text-xs text-neutral-500">
-          <span>{a.author ?? "The Common Ledger"}</span>
-          {date ? <span> · {date}</span> : null}
+    <article className="rounded-2xl border border-neutral-200 bg-white p-6 hover:bg-neutral-50">
+      {/* Cover image (only shows if the article has image: ... in front matter) */}
+      {a.image ? (
+        <div className="relative mb-5 h-48 w-full overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100">
+          <Image src={a.image} alt={a.title} fill className="object-cover" />
         </div>
+      ) : null}
 
-        <h3 className="text-lg font-semibold text-neutral-900">{a.title}</h3>
+      <h3 className="text-xl font-semibold text-neutral-900">
+        <Link href={`/articles/${a.slug}`} className="hover:underline">
+          {a.title}
+        </Link>
+      </h3>
 
-        {a.subtitle ? <p className="text-sm text-neutral-700">{a.subtitle}</p> : null}
+      {a.subtitle ? <p className="mt-1 text-neutral-600">{a.subtitle}</p> : null}
 
-        {a.excerpt ? <p className="mt-2 text-sm text-neutral-600">{a.excerpt}</p> : null}
+      {a.excerpt ? <p className="mt-3 text-neutral-700">{a.excerpt}</p> : null}
 
-        {a.tags?.length ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {a.tags.map((t) => (
-              <span
-                key={t}
-                className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs text-neutral-700"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
+      <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-neutral-500">
+        <span>{a.author ?? "The Common Ledger"}</span>
+        {a.date ? (
+          <>
+            <span>•</span>
+            <span>{formatDate(a.date)}</span>
+          </>
         ) : null}
       </div>
-    </Link>
+    </article>
   );
 }
