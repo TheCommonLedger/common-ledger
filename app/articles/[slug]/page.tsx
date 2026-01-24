@@ -49,6 +49,7 @@ export default async function ArticlePage(
 
   const parsed = matter(raw);
   const data = (parsed.data ?? {}) as any;
+  marked.setOptions({ breaks: true });
   const html = marked.parse(parsed.content ?? "");
 
   return (
@@ -81,20 +82,22 @@ export default async function ArticlePage(
         </header>
 
         {/* Cover image */}
-        {data.image ? (
-          <div className="relative mb-8 h-64 w-full overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
-            <Image
-              src={data.image}
-              alt={data.title ?? "Article image"}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-        ) : null}
+          {data.image ? (
+            <div className="relative mb-8 h-[420px] w-full overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+              <Image
+                src={data.image}
+                alt={data.title ?? "Article image"}
+                fill
+                className="object-contain"
+                priority
+                quality={95}
+                sizes="(max-width: 900px) 100vw, 900px"
+              />
+            </div>
+          ) : null}
 
         <article
-          className="prose prose-neutral max-w-none prose-headings:tracking-tight prose-a:font-semibold prose-a:text-neutral-900"
+          className="tcl-article"
           dangerouslySetInnerHTML={{ __html: html }}
         />
         </div>

@@ -63,17 +63,25 @@ export default function HomePage() {
           </p>
 
           <div className="mt-6 flex items-center gap-4">
-            <div className="relative h-14 w-14 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
-              <Image
-                src="/brand/badge.png"
-                alt="The Common Ledger Badge"
-                fill
-                className="object-contain p-1"
-              />
-            </div>
-            <div className="text-sm text-neutral-700">
-              <div className="font-semibold text-neutral-900">Truth-first</div>
-              <div className="text-neutral-600">Rhetoric stripped away</div>
+              <a
+                href="/brand/badge.png"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block"
+>
+              <div className="relative h-28 w-28 overflow-hidden rounded-2xl border border-neutral-200 bg-white hover:shadow-md transition-shadow">
+                <Image
+                  src="/brand/badge.png"
+                  alt="The Common Ledger Badge"
+                  fill
+                  className="object-contain"
+                  quality={95}            
+                />
+              </div>
+            </a>
+          <div className="text-sm text-neutral-700">
+             <div className="font-semibold text-neutral-900">Truth-first</div>
+             <div className="text-neutral-600">Rhetoric stripped away</div>
             </div>
           </div>
         </div>
@@ -82,8 +90,8 @@ export default function HomePage() {
       {/* Featured */}
       <section className="mt-10">
         <div className="flex items-end justify-between gap-4">
-          <h2 className="text-xl font-semibold text-neutral-900">Featured</h2>
-          <Link href="/articles" className="text-sm font-semibold text-neutral-700 hover:underline">
+          <h2 className="text-xl font-semibold text-neutral-200">Featured</h2>
+          <Link href="/articles" className="text-sm font-semibold text-neutral-200 hover:underline">
             View all →
           </Link>
         </div>
@@ -101,7 +109,7 @@ export default function HomePage() {
 
       {/* Latest */}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold text-neutral-900">Latest</h2>
+        <h2 className="text-xl font-semibold text-neutral-200">Latest</h2>
         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
           {latest.map((a) => (
             <ArticleCard key={a.slug} a={a} />
