@@ -44,7 +44,7 @@ export default function SiteFooter() {
         <div className="mt-7 rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
           <div className="text-sm font-semibold text-neutral-900">Newsletter (coming soon)</div>
           <div className="mt-1 text-sm text-neutral-700">
-            Want email updates? We’ll add this once the signup provider is chosen.
+            Newsletter signups are coming soon.
           </div>
         </div>
       </section>
