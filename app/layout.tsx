@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,18 +38,23 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body className="bg-[#f6f7f9] text-neutral-900">
-        <div className="mx-auto max-w-6xl px-5 py-10">
-          <SiteHeader />
-        </div>
 
-        {children}
-        <div className="mx-auto max-w-6xl px-5 pb-10">
-    <SiteFooter />
-  </div>
-      </body>
-    </html>
-  );
+return (
+  <html lang="en">
+    <body className="bg-[#f6f7f9] text-neutral-900">
+      <div className="mx-auto max-w-6xl px-5 py-10">
+        <SiteHeader />
+      </div>
+
+      {children}
+
+      <div className="mx-auto max-w-6xl px-5 pb-10">
+        <SiteFooter />
+      </div>
+
+      <Analytics />
+    </body>
+  </html>
+);
+
 }

@@ -1,22 +1,9 @@
 import Link from "next/link";
-import ArticleCard from "../../components/ArticleCard";
 import { getAllArticles } from "../../lib/articles";
-
-export const metadata = {
-  title: "Articles · The Common Ledger",
-  description: "Browse all articles from The Common Ledger.",
-};
-
-function safeTime(dateStr?: string) {
-  if (!dateStr) return 0;
-  const t = Date.parse(dateStr);
-  return Number.isNaN(t) ? 0 : t;
-}
+import ArticlesClient from "../../components/ArticlesClient";
 
 export default function ArticlesIndexPage() {
-  const articles = getAllArticles()
-    .slice()
-    .sort((a, b) => safeTime(b.date) - safeTime(a.date));
+  const articles = getAllArticles();
 
   return (
     <main className="mx-auto max-w-6xl px-5 pb-10">
@@ -39,35 +26,19 @@ export default function ArticlesIndexPage() {
             Plain language
           </span>
         </div>
+
+        {/* CLIENT SEARCH + FILTER */}
+        <ArticlesClient articles={articles} />
       </section>
 
-      <section className="mt-8">
-        {articles.length === 0 ? (
-          <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6 text-neutral-700">
-            No articles yet. Add an MDX file in <code>Content/Articles</code>.
-          </div>
-        ) : (
-          <>
-            <div className="flex items-end justify-between gap-4">
-              <h2 className="text-xl font-semibold text-neutral-900">
-                All Articles
-              </h2>
-              <Link
-                href="/"
-                className="text-sm font-semibold text-neutral-700 hover:underline"
-              >
-                Back to Home →
-              </Link>
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-              {articles.map((a) => (
-                <ArticleCard key={a.slug} a={a} />
-              ))}
-            </div>
-          </>
-        )}
-      </section>
+      <div className="mt-6">
+        <Link
+          href="/"
+          className="text-sm font-semibold text-neutral-700 hover:underline"
+        >
+          Back to Home →
+        </Link>
+      </div>
     </main>
   );
 }
