@@ -132,6 +132,32 @@ body {
   border-bottom-color: rgba(15, 23, 42, 0.9);
 }
 
+/* --- The Common Ledger article styling --- */
+.tcl-article table {
+  font-size: 11px;
+  line-height: 1.45;
+}
 
+.tcl-article th {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tcl-article td,
+.tcl-article th {
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+.tcl-article table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tcl-article table,
+.tcl-article td,
+.tcl-article th {
+  border: 1px solid rgb(229, 229, 229); /* neutral-200-ish */
+}
 
 }
