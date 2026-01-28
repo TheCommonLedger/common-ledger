@@ -35,6 +35,12 @@ export default function SiteHeader() {
           href="/articles">       
           Read
         </Link>
+        <a
+          href="mailto:thecommonledger@gmail.com"
+          className="text-neutral-500 hover:text-neutral-900"
+        >
+          Contact
+        </a>
       </nav>
     </header>
   );

@@ -59,6 +59,9 @@ export default function SiteFooter() {
           <Link className="hover:underline" href="/about">
             About
           </Link>
+          <a className="hover:underline" href="mailto:thecommonledger@gmail.com">
+            Contact: thecommonledger@gmail.com
+          </a>
         </div>
       </div>
     </footer>
